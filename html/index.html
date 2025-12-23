@@ -1,0 +1,799 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Hiring Market Intelligence Radar</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+    
+    :root{
+      --bg:#000000;
+      --bg-secondary:#0a0a0a;
+      --text:#ffffff;
+      --text-secondary:#a1a1aa;
+      --purple:#a855f7;
+      --purple-light:#c084fc;
+      --blue:#3b82f6;
+      --blue-light:#60a5fa;
+      --cyan:#06b6d4;
+      --pink:#ec4899;
+      --green:#10b981;
+      --orange:#f97316;
+    }
+    
+    *{box-sizing:border-box;margin:0;padding:0}
+    
+    body{
+      font-family:'Inter',system-ui,-apple-system,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      overflow-x:hidden;
+      line-height:1.6;
+    }
+    
+    /* Animated Grid Background */
+    .grid-bg{
+      position:fixed;
+      inset:0;
+      background-image:
+        linear-gradient(to right, rgba(168,85,247,0.1) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(168,85,247,0.1) 1px, transparent 1px);
+      background-size:80px 80px;
+      animation:grid-move 20s linear infinite;
+      z-index:0;
+    }
+    
+    @keyframes grid-move{
+      0%{background-position:0 0}
+      100%{background-position:80px 80px}
+    }
+    
+    /* Gradient Orbs */
+    .orb{
+      position:fixed;
+      border-radius:50%;
+      filter:blur(100px);
+      opacity:0.5;
+      animation:float-orb 20s ease-in-out infinite;
+      z-index:0;
+    }
+    
+    .orb-1{
+      width:600px;
+      height:600px;
+      background:radial-gradient(circle, var(--purple) 0%, transparent 70%);
+      top:-300px;
+      left:-200px;
+      animation-delay:0s;
+    }
+    
+    .orb-2{
+      width:500px;
+      height:500px;
+      background:radial-gradient(circle, var(--blue) 0%, transparent 70%);
+      top:50%;
+      right:-150px;
+      animation-delay:5s;
+    }
+    
+    .orb-3{
+      width:400px;
+      height:400px;
+      background:radial-gradient(circle, var(--cyan) 0%, transparent 70%);
+      bottom:-200px;
+      left:30%;
+      animation-delay:10s;
+    }
+    
+    @keyframes float-orb{
+      0%,100%{transform:translate(0,0) scale(1)}
+      25%{transform:translate(50px,-50px) scale(1.1)}
+      50%{transform:translate(-30px,30px) scale(0.9)}
+      75%{transform:translate(40px,20px) scale(1.05)}
+    }
+    
+    /* Content */
+    .content{position:relative;z-index:1}
+    
+    /* Navbar */
+    nav{
+      padding:20px 0;
+      border-bottom:1px solid rgba(255,255,255,0.1);
+      backdrop-filter:blur(20px);
+      background:rgba(0,0,0,0.5);
+      position:sticky;
+      top:0;
+      z-index:100;
+    }
+    
+    .container{
+      max-width:1280px;
+      margin:0 auto;
+      padding:0 32px;
+    }
+    
+    .nav-content{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+    }
+    
+    .logo{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      font-size:20px;
+      font-weight:800;
+      background:linear-gradient(135deg, var(--purple), var(--blue), var(--cyan));
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      background-clip:text;
+    }
+    
+    .logo-icon{
+      width:40px;
+      height:40px;
+      background:linear-gradient(135deg, var(--purple), var(--blue));
+      border-radius:12px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow:0 0 30px rgba(168,85,247,0.5);
+      animation:pulse-glow 3s ease-in-out infinite;
+    }
+    
+    @keyframes pulse-glow{
+      0%,100%{box-shadow:0 0 30px rgba(168,85,247,0.5)}
+      50%{box-shadow:0 0 50px rgba(168,85,247,0.8), 0 0 80px rgba(59,130,246,0.4)}
+    }
+    
+    .logo-icon svg{width:22px;height:22px}
+    
+    .nav-links{
+      display:flex;
+      gap:32px;
+      align-items:center;
+    }
+    
+    .nav-links a{
+      color:var(--text-secondary);
+      text-decoration:none;
+      font-size:15px;
+      font-weight:500;
+      transition:all .3s;
+      position:relative;
+    }
+    
+    .nav-links a:hover{
+      color:var(--text);
+    }
+    
+    .nav-links a::after{
+      content:'';
+      position:absolute;
+      bottom:-4px;
+      left:0;
+      width:0;
+      height:2px;
+      background:linear-gradient(90deg, var(--purple), var(--blue));
+      transition:width .3s;
+    }
+    
+    .nav-links a:hover::after{
+      width:100%;
+    }
+    
+    .btn{
+      padding:12px 28px;
+      border-radius:12px;
+      font-size:15px;
+      font-weight:700;
+      text-decoration:none;
+      transition:all .3s;
+      border:none;
+      cursor:pointer;
+      position:relative;
+      overflow:hidden;
+    }
+    
+    .btn-primary{
+      background:linear-gradient(135deg, var(--purple), var(--blue));
+      color:white;
+      box-shadow:0 10px 40px rgba(168,85,247,0.4);
+    }
+    
+    .btn-primary::before{
+      content:'';
+      position:absolute;
+      inset:0;
+      background:linear-gradient(135deg, var(--purple-light), var(--blue-light));
+      opacity:0;
+      transition:opacity .3s;
+    }
+    
+    .btn-primary:hover::before{
+      opacity:1;
+    }
+    
+    .btn-primary span{
+      position:relative;
+      z-index:1;
+    }
+    
+    .btn-primary:hover{
+      transform:translateY(-2px);
+      box-shadow:0 15px 50px rgba(168,85,247,0.6);
+    }
+    
+    /* Hero Section */
+    .hero{
+      padding:120px 0 80px;
+      text-align:center;
+    }
+    
+    .hero-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 20px;
+      background:rgba(168,85,247,0.1);
+      border:1px solid rgba(168,85,247,0.3);
+      border-radius:30px;
+      font-size:14px;
+      font-weight:600;
+      margin-bottom:32px;
+      animation:fadeInUp .8s ease;
+      backdrop-filter:blur(10px);
+    }
+    
+    .hero-badge span{
+      width:8px;
+      height:8px;
+      background:linear-gradient(135deg, var(--green), var(--cyan));
+      border-radius:50%;
+      animation:pulse-dot 2s ease-in-out infinite;
+    }
+    
+    @keyframes pulse-dot{
+      0%,100%{opacity:1;transform:scale(1)}
+      50%{opacity:0.5;transform:scale(1.3)}
+    }
+    
+    h1{
+      font-size:clamp(48px, 8vw, 96px);
+      font-weight:900;
+      line-height:1.1;
+      margin-bottom:32px;
+      animation:fadeInUp .8s ease .1s backwards;
+      letter-spacing:-2px;
+    }
+    
+    .gradient-text{
+      background:linear-gradient(135deg, var(--purple) 0%, var(--blue) 50%, var(--cyan) 100%);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      background-clip:text;
+      background-size:200% 200%;
+      animation:gradient-shift 5s ease infinite;
+    }
+    
+    @keyframes gradient-shift{
+      0%,100%{background-position:0% 50%}
+      50%{background-position:100% 50%}
+    }
+    
+    .hero-subtitle{
+      font-size:clamp(18px, 3vw, 24px);
+      color:var(--text-secondary);
+      max-width:700px;
+      margin:0 auto 48px;
+      animation:fadeInUp .8s ease .2s backwards;
+      line-height:1.6;
+    }
+    
+    @keyframes fadeInUp{
+      from{opacity:0;transform:translateY(30px)}
+      to{opacity:1;transform:translateY(0)}
+    }
+    
+    .hero-cta{
+      display:flex;
+      gap:20px;
+      justify-content:center;
+      align-items:center;
+      flex-wrap:wrap;
+      animation:fadeInUp .8s ease .3s backwards;
+    }
+    
+    .btn-secondary{
+      background:rgba(255,255,255,0.05);
+      color:var(--text);
+      border:1px solid rgba(255,255,255,0.2);
+      backdrop-filter:blur(10px);
+    }
+    
+    .btn-secondary:hover{
+      background:rgba(255,255,255,0.1);
+      border-color:rgba(168,85,247,0.5);
+      transform:translateY(-2px);
+    }
+    
+    /* Animated Stats Cards */
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+      gap:24px;
+      margin-top:100px;
+      animation:fadeInUp .8s ease .4s backwards;
+    }
+    
+    .stat-card{
+      background:rgba(255,255,255,0.03);
+      border:1px solid rgba(255,255,255,0.1);
+      border-radius:24px;
+      padding:32px;
+      transition:all .4s;
+      position:relative;
+      overflow:hidden;
+      backdrop-filter:blur(10px);
+    }
+    
+    .stat-card::before{
+      content:'';
+      position:absolute;
+      top:-50%;
+      left:-50%;
+      width:200%;
+      height:200%;
+      background:conic-gradient(from 0deg, transparent, var(--purple), transparent 30%);
+      animation:rotate-border 4s linear infinite;
+      opacity:0;
+      transition:opacity .4s;
+    }
+    
+    @keyframes rotate-border{
+      to{transform:rotate(360deg)}
+    }
+    
+    .stat-card:hover::before{
+      opacity:0.5;
+    }
+    
+    .stat-card-inner{
+      position:relative;
+      z-index:1;
+    }
+    
+    .stat-card:hover{
+      transform:translateY(-8px);
+      border-color:rgba(168,85,247,0.5);
+      box-shadow:0 20px 60px rgba(168,85,247,0.3);
+    }
+    
+    .stat-icon{
+      width:56px;
+      height:56px;
+      background:linear-gradient(135deg, var(--purple), var(--blue));
+      border-radius:16px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      margin-bottom:20px;
+      box-shadow:0 10px 30px rgba(168,85,247,0.4);
+    }
+    
+    .stat-icon svg{
+      width:28px;
+      height:28px;
+    }
+    
+    .stat-value{
+      font-size:40px;
+      font-weight:900;
+      background:linear-gradient(135deg, var(--purple-light), var(--blue-light));
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      background-clip:text;
+      margin-bottom:8px;
+    }
+    
+    .stat-label{
+      font-size:16px;
+      color:var(--text-secondary);
+      font-weight:500;
+    }
+    
+    /* Features with Bento Grid */
+    .features{
+      padding:120px 0;
+    }
+    
+    .section-header{
+      text-align:center;
+      margin-bottom:80px;
+    }
+    
+    .section-tag{
+      display:inline-block;
+      padding:8px 20px;
+      background:rgba(16,185,129,0.1);
+      border:1px solid rgba(16,185,129,0.3);
+      border-radius:30px;
+      color:var(--green);
+      font-size:14px;
+      font-weight:600;
+      margin-bottom:20px;
+      backdrop-filter:blur(10px);
+    }
+    
+    h2{
+      font-size:clamp(40px, 6vw, 72px);
+      font-weight:900;
+      margin-bottom:20px;
+      letter-spacing:-1px;
+    }
+    
+    .section-subtitle{
+      font-size:20px;
+      color:var(--text-secondary);
+      max-width:640px;
+      margin:0 auto;
+    }
+    
+    .bento-grid{
+      display:grid;
+      grid-template-columns:repeat(12, 1fr);
+      gap:24px;
+    }
+    
+    .bento-item{
+      background:rgba(255,255,255,0.03);
+      border:1px solid rgba(255,255,255,0.1);
+      border-radius:24px;
+      padding:40px;
+      transition:all .4s;
+      position:relative;
+      overflow:hidden;
+      backdrop-filter:blur(10px);
+    }
+    
+    .bento-item::after{
+      content:'';
+      position:absolute;
+      inset:0;
+      background:radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(168,85,247,0.1), transparent 40%);
+      opacity:0;
+      transition:opacity .4s;
+    }
+    
+    .bento-item:hover::after{
+      opacity:1;
+    }
+    
+    .bento-item:hover{
+      border-color:rgba(168,85,247,0.5);
+      transform:translateY(-4px);
+      box-shadow:0 20px 60px rgba(168,85,247,0.2);
+    }
+    
+    .bento-large{grid-column:span 8}
+    .bento-small{grid-column:span 4}
+    .bento-medium{grid-column:span 6}
+    
+    @media(max-width:1024px){
+      .bento-large, .bento-small, .bento-medium{grid-column:span 12}
+    }
+    
+    .feature-icon{
+      width:64px;
+      height:64px;
+      background:linear-gradient(135deg, var(--purple), var(--pink));
+      border-radius:16px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      margin-bottom:24px;
+      box-shadow:0 10px 30px rgba(236,72,153,0.4);
+      position:relative;
+      z-index:1;
+    }
+    
+    .feature-icon svg{
+      width:32px;
+      height:32px;
+    }
+    
+    h3{
+      font-size:28px;
+      font-weight:800;
+      margin-bottom:16px;
+      position:relative;
+      z-index:1;
+    }
+    
+    .bento-item p{
+      color:var(--text-secondary);
+      font-size:16px;
+      line-height:1.7;
+      position:relative;
+      z-index:1;
+    }
+    
+    /* Particles Effect */
+    .particles{
+      position:fixed;
+      inset:0;
+      z-index:0;
+      pointer-events:none;
+    }
+    
+    .particle{
+      position:absolute;
+      width:4px;
+      height:4px;
+      background:var(--purple);
+      border-radius:50%;
+      opacity:0.3;
+      animation:float-particle 20s ease-in-out infinite;
+    }
+    
+    @keyframes float-particle{
+      0%,100%{transform:translateY(0) translateX(0)}
+      25%{transform:translateY(-100px) translateX(50px)}
+      50%{transform:translateY(-200px) translateX(-50px)}
+      75%{transform:translateY(-100px) translateX(50px)}
+    }
+    
+    /* CTA Section */
+    .cta-section{
+      padding:120px 0;
+      text-align:center;
+    }
+    
+    .cta-card{
+      background:rgba(255,255,255,0.03);
+      border:1px solid rgba(255,255,255,0.1);
+      border-radius:32px;
+      padding:80px 40px;
+      position:relative;
+      overflow:hidden;
+      backdrop-filter:blur(20px);
+    }
+    
+    .cta-card::before{
+      content:'';
+      position:absolute;
+      inset:-2px;
+      background:conic-gradient(from 0deg, var(--purple), var(--blue), var(--cyan), var(--purple));
+      border-radius:32px;
+      opacity:0.5;
+      filter:blur(20px);
+      animation:rotate-gradient 6s linear infinite;
+      z-index:-1;
+    }
+    
+    @keyframes rotate-gradient{
+      to{transform:rotate(360deg)}
+    }
+    
+    .cta-card h2{
+      font-size:clamp(36px, 5vw, 64px);
+      margin-bottom:24px;
+    }
+    
+    .cta-card p{
+      font-size:20px;
+      color:var(--text-secondary);
+      max-width:600px;
+      margin:0 auto 48px;
+    }
+    
+    /* Footer */
+    footer{
+      border-top:1px solid rgba(255,255,255,0.1);
+      padding:40px 0;
+      text-align:center;
+      color:var(--text-secondary);
+      font-size:14px;
+      backdrop-filter:blur(10px);
+    }
+    
+    @media(max-width:768px){
+      .hero{padding:80px 0 60px}
+      .container{padding:0 20px}
+      .hero-cta{flex-direction:column}
+      .nav-links{gap:16px}
+      .stats{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <div class="grid-bg"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  
+  <div class="particles" id="particles"></div>
+  
+  <div class="content">
+    <nav>
+      <div class="container">
+        <div class="nav-content">
+          <div class="logo">
+            <div class="logo-icon">
+              <svg fill="white" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            </div>
+            <span>Hiring Radar</span>
+          </div>
+          <div class="nav-links">
+            <a href="/about">About</a>
+            <a href="#features">Features</a>
+            <a href="/connect" class="btn btn-primary"><span>Get Started</span></a>
+          </div>
+        </div>
+      </div>
+    </nav>
+    
+    <section class="hero">
+      <div class="container">
+        <div class="hero-badge">
+          <span></span>
+          OAuth 2.0 • Real-time Analytics • Enterprise Ready
+        </div>
+        
+        <h1>
+          Transform Job Data<br/>
+          Into <span class="gradient-text">Hiring Intelligence</span>
+        </h1>
+        
+        <p class="hero-subtitle">
+          Enterprise-grade hiring analytics powered by OAuth authentication, 
+          real-time market data aggregation, and intelligent benchmark computation.
+        </p>
+        
+        <div class="hero-cta">
+          <a href="/connect" class="btn btn-primary">
+            <span>
+              <svg width="20" height="20" fill="white" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:8px">
+                <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+              </svg>
+              Launch Dashboard
+            </span>
+          </a>
+          <a href="/about" class="btn btn-secondary">View Documentation</a>
+        </div>
+        
+        <div class="stats">
+          <div class="stat-card">
+            <div class="stat-card-inner">
+              <div class="stat-icon">
+                <svg fill="white" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+              </div>
+              <div class="stat-value">OAuth 2.0</div>
+              <div class="stat-label">Secure Authentication</div>
+            </div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-card-inner">
+              <div class="stat-icon">
+                <svg fill="white" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+              </div>
+              <div class="stat-value">Real-time</div>
+              <div class="stat-label">Market Intelligence</div>
+            </div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-card-inner">
+              <div class="stat-icon">
+                <svg fill="white" viewBox="0 0 24 24"><path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/></svg>
+              </div>
+              <div class="stat-value">15min</div>
+              <div class="stat-label">Smart Caching</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="features" id="features">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">✨ Powerful Features</span>
+          <h2 class="gradient-text">Everything You Need</h2>
+          <p class="section-subtitle">
+            Built with modern technologies for enterprise teams who demand excellence
+          </p>
+        </div>
+        
+        <div class="bento-grid">
+          <div class="bento-item bento-large">
+            <div class="feature-icon">
+              <svg fill="white" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+            </div>
+            <h3>Enterprise OAuth 2.0</h3>
+            <p>Three-legged authorization flow with secure token exchange, session management, and state validation for CSRF protection. Built to enterprise security standards.</p>
+          </div>
+          
+          <div class="bento-item bento-small">
+            <div class="feature-icon" style="background:linear-gradient(135deg, var(--blue), var(--cyan))">
+              <svg fill="white" viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+            </div>
+            <h3>Market Trends</h3>
+            <p>Real-time job market aggregation with intelligent caching</p>
+          </div>
+          
+          <div class="bento-item bento-medium">
+            <div class="feature-icon" style="background:linear-gradient(135deg, var(--cyan), var(--green))">
+              <svg fill="white" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+            </div>
+            <h3>Smart Analytics</h3>
+            <p>Computed demand and competition scores with explainable AI insights for strategic hiring decisions</p>
+          </div>
+          
+          <div class="bento-item bento-medium">
+            <div class="feature-icon" style="background:linear-gradient(135deg, var(--orange), var(--pink))">
+              <svg fill="white" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            </div>
+            <h3>Performance Optimized</h3>
+            <p>TTL caching strategy reduces API calls and improves response times for lightning-fast analytics</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="cta-section">
+      <div class="container">
+        <div class="cta-card">
+          <h2 class="gradient-text">Ready to Transform Your Hiring?</h2>
+          <p>Connect your organization and unlock enterprise-grade hiring intelligence in minutes.</p>
+          <div style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap">
+            <a href="/connect" class="btn btn-primary" style="font-size:18px;padding:16px 40px">
+              <span>Start Now — It's Free</span>
+            </a>
+            <a href="/about" class="btn btn-secondary" style="font-size:18px;padding:16px 40px">
+              Learn More
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <footer>
+      <div class="container">
+        <p>© 2024 Hiring Market Intelligence Radar • Built with Node.js & Modern Web Standards</p>
+      </div>
+    </footer>
+  </div>
+  
+  <script>
+    // Generate floating particles
+    const particlesContainer = document.getElementById('particles');
+    const colors = ['#a855f7', '#3b82f6', '#06b6d4', '#10b981'];
+    
+    for(let i = 0; i < 50; i++){
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      particle.style.left = Math.random() * 100 + '%';
+      particle.style.top = Math.random() * 100 + '%';
+      particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+      particle.style.animationDelay = Math.random() * 20 + 's';
+      particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+      particlesContainer.appendChild(particle);
+    }
+    
+    // Mouse tracking for bento items
+    document.querySelectorAll('.bento-item').forEach(item => {
+      item.addEventListener('mousemove', (e) => {
+        const rect = item.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        item.style.setProperty('--mouse-x', x + 'px');
+        item.style.setProperty('--mouse-y', y + 'px');
+      });
+    });
+  </script>
+</body>
+</html>
