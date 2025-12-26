@@ -11,6 +11,7 @@ const querystring = require("querystring");
 // Config (Render-safe)
 // --------------------
 const PORT = process.env.PORT || 3005;
+const RENDER_EXTERNAL_URL = process.env.RENDER_EXTERNAL_URL;
 
 // Read Google OAuth credentials from file (local) or env (prod)
 let google = {};
@@ -155,6 +156,35 @@ function httpsRequestJSON({ host, path, method, headers, body }) {
     req.end();
   });
 }
+/* ----------------------------
+   HEARTBEAT / KEEP-ALIVE
+   ---------------------------- */
+
+let serverStartTime = Date.now();
+
+function startHeartbeat() {
+  if (!RENDER_EXTERNAL_URL) {
+    console.log('⚠️  RENDER_EXTERNAL_URL not set. Heartbeat disabled (fine for local dev).');
+    return;
+  }
+
+  const healthUrl = `${RENDER_EXTERNAL_URL}/health`;
+  console.log(`💓 Heartbeat enabled: pinging ${healthUrl} every 10 minutes`);
+
+  setInterval(() => {
+    const protocol = RENDER_EXTERNAL_URL.startsWith('https') ? https : http;
+    
+    protocol.get(healthUrl, (res) => {
+      if (res.statusCode === 200) {
+        console.log(`💓 Heartbeat OK (${new Date().toLocaleTimeString()})`);
+      } else {
+        console.log(`⚠️  Heartbeat received ${res.statusCode}`);
+      }
+    }).on('error', (err) => {
+      console.error('❌ Heartbeat failed:', err.message);
+    });
+  }, 10 * 60 * 1000);
+}
 
 // TTL cache (stored per session)
 function cacheGet(session, key) {
@@ -186,8 +216,11 @@ function buildUSAJobsSearchPath(keyword, location) {
 const server = http.createServer(request_handler);
 
 server.listen(PORT, () => {
-  console.log(`Now listening on http://localhost:${PORT}`);
-  console.log("Redirect URI in use:", redirect_uri);
+  console.log(`🚀 HiringRadar listening on http://localhost:${PORT}`);
+  console.log("📊 Health check available at /health");
+  console.log("🔐 Redirect URI in use:", redirect_uri);
+
+  startHeartbeat();
 });
 
 async function request_handler(req, res) {
@@ -199,6 +232,17 @@ async function request_handler(req, res) {
   // Only GET routes (simple and CS355-friendly)
   if (req.method !== "GET") {
     return sendText(res, 405, "Method Not Allowed");
+  }
+
+  if (pathname === "/health") {
+    const uptime = Math.floor((Date.now() - serverStartTime) / 1000);
+    return sendJSON(res, 200, {
+      status: 'ok',
+      service: 'HiringRadar',
+      uptime: `${uptime}s`,
+      sessions: sessions.size,
+      timestamp: new Date().toISOString()
+    });
   }
 
   // --------------------
